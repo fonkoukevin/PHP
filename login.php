@@ -11,30 +11,46 @@ $errors = [];
 $messages = [];
 
 // Si le formulaire a été souis
-if (isset($_POST['loginUser'])) {
-    //@todo appeler une méthode verifyUserLoginPassword qui retourne false ou retourne un tableau avec l'utisateur
-    $user = verifyUserLoginPassword($pdo, $_POST['email'], $_POST['password']);
+if (!empty($_POST)) {
+    if (isset($_POST['loginUser'])) {
+        //@todo appeler une méthode verifyUserLoginPassword qui retourne false ou retourne un tableau avec l'utisateur
+        $user = verifyUserLoginPassword($pdo, $_POST['email'], $_POST['password']);
 
-    /* @todo si on récupère un utilisateur, alors on stocke l'utilisateur dans la session
+        /* @todo si on récupère un utilisateur, alors on stocke l'utilisateur dans la session
         et on redirige l'utilisateur soit vers l'admin (si role admin) soit vers l'accueil
         sinon on affiche une erreur "Email ou mot de passe incorrect"
     */
+        if ($user) {
+             session_start();
+            $_SESSION['user'] = $user;
 
-  }
+            if ($user['role'] === "admin") {
+                header('location: ./admin/index.php');
+            } else {
+                header('location: ./index.php');
+            }
+        } else { ?>
+            <div class="alert alert-danger" role="alert">
+                <?php echo "Utilisateur ou mot de passe incorrect"; ?>
+            </div>
+<?php   }
+    }
+}
+
 
 ?>
-    <h1>Login</h1>
+<h1>Login</h1>
 
-    <?php // @todo afficher les erreurs avec la structure suivante :
-        /*
+<?php // @todo afficher les erreurs avec la structure suivante :
+/*
         <div class="alert alert-danger" role="alert">
             Utilisatuer ou mot de passe incorrect
         </div>
         */
-    ?>
+?>
 
-    <form method="POST">
-        <div class="mb-3">
+<form method="POST">
+    <div class="mb-3">
         <div class="mb-3">
             <label for="email" class="form-label">Email</label>
             <input type="email" class="form-control" id="email" name="email">
@@ -46,8 +62,8 @@ if (isset($_POST['loginUser'])) {
 
         <input type="submit" name="loginUser" class="btn btn-primary" value="Enregistrer">
 
-    </form>
+</form>
 
-    <?php
+<?php
 require_once 'templates/footer.php';
 ?>

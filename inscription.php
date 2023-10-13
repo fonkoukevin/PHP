@@ -14,9 +14,44 @@ if (isset($_POST['addUser'])) {
         si true a été retourné, on affiche un message "Merci pour votre inscription"
         sinon on affiche une erreur "Une erreur s'est produite lors de votre inscription"
     */
-}
+    $first_name= $_POST["first_name"];
+    $last_name= $_POST["last_name"];
+    $email=$_POST["email"];
+    $password=$_POST["password"];
+//   $role =$_POST["role"];
 
+   $adduser= addUser($pdo,$first_name,$last_name,$email,$password);
+   if($adduser){
+    $messages[] = "Merci pour votre inscription";
+    // header('Location: index.php'); 
+
+}
+else{
+    $errors[] ="Une erreur s'est produite lors de votre inscription";
+}
+}
 ?>
+
+        
+        
+            <?php 
+            if(!empty($messages)){
+            foreach($messages as $message){?>
+            <div class="alert alert-success" role="alert">
+                    <?= $message; ?>
+            </div>
+          <?php   
+            }} 
+            if(isset($messages)){
+            foreach($errors as $error){?>
+                <div class="alert alert-danger" role="alert">
+                    <?= $error; ?>
+                </div>
+
+         <?php   }}?>
+       
+
+
     <h1>Inscription</h1>
 
 

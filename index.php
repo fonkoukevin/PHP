@@ -4,11 +4,13 @@ require_once __DIR__ . "/lib/session.php";
 require_once __DIR__ . "/lib/pdo.php";
 require_once __DIR__ . "/lib/article.php";
 
+define('_HOMEPAGE_ITEM_LIMIT_', 10);
 require_once __DIR__ . "/templates/header.php";
 
 // @todo Il faut appeler la fonction getArticles, cette fonction est a créer
 // $articles = getArticles($pdo, _HOMEPAGE_ITEM_LIMIT_);
 
+$articles = getArticles($pdo, _HOMEPAGE_ITEM_LIMIT_);
 ?>
 
 
